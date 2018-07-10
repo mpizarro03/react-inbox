@@ -3,7 +3,7 @@ import React from 'react';
 const Message = (props) => {
   // console.log("props:", props)
   // console.log("read:", props.read)
-  // console.log("starred:", props.starred)
+  console.log("starred:", props.starred)
   // console.log("selected:", props.selected)
   // console.log("labels:", props.labels)
   return (
@@ -14,7 +14,7 @@ const Message = (props) => {
             <input type="checkbox" />
           </div>
           <div className="col-xs-2">
-            <i className="star fa fa-star-o">{props.starred}</i>
+            <i className="star fa fa-star-o"></i>
           </div>
         </div>
       </div>
