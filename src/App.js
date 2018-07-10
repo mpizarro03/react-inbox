@@ -72,30 +72,42 @@ class App extends Component {
   }
 star = (id) => {
   let allMessages = this.state.allMessages
-
-
-  //updated state to reflect that that item was starred
+  //update state to reflect that a message was starred
   for(let i = 0; i < allMessages.length; i++) {
     if(allMessages[i].id === id) {
       if(allMessages[i].starred === true) {
         allMessages[i].starred = false
       }
-      else if(allMessages[i].starred === false){
+      else {
         allMessages[i].starred = true
       }
     }
   }
-
+  this.forceUpdate()
+}
+select = (id) => {
+  let allMessages = this.state.allMessages
+  //update state to reflect that a message was selected
+  for(let i = 0; i < allMessages.length; i++){
+    if(allMessages[i].id === id) {
+      if(allMessages[i].selected === true) {
+        allMessages[i].selected = false
+      }
+      else {
+        allMessages[i].selected = true
+      }
+    }
+  }
   this.forceUpdate()
 }
   render() {
-    // console.log("this.state.message:", this.state.messages)
     return (
       <div className="container">
         <ToolBar/>
         <Messages
           messages={this.state.allMessages}
           star={this.star}
+          select={this.select}
         />
       </div>
     );

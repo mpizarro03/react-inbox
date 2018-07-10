@@ -8,19 +8,23 @@ const Message = (props) => {
   // console.log("selected:", props.selected)
   // console.log("labels:", props.labels)
   return (
-    <div className={`row message  ${props.read ? "read" : "unread"}`}>
+    <div className={`row message  ${props.read ? "read" : "unread"} ${props.selected ? "selected" : ""}`}>
       <div className="col-xs-1">
         <div className="row">
           <div className="col-xs-2">
-            <input type="checkbox" checked={`${props.selected ? "defaultChecked" : ""}`} />
+            <input type="checkbox"
+              checked={`${props.selected ? "defaultChecked" : ""}`}
+              onClick={() => {
+                props.select(props.id)
+              }}
+            />
           </div>
           <div className="col-xs-2">
-            <i className={`star fa
-              ${props.starred ? "fa-star" : "fa-star-o"}`}
+            <i className={`star fa ${props.starred ? "fa-star" : "fa-star-o"}`}
               onClick={() => {
-              props.star(props.id)
-              }
-            }></i>
+                props.star(props.id)
+              }}
+            ></i>
           </div>
         </div>
       </div>

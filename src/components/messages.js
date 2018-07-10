@@ -13,6 +13,7 @@ const Messages = (props) => {
         starred={message.starred}
         star={props.star}
         selected={message.selected}
+        select={props.select}
         labels={message.labels}/>)}
     </div>
   )
