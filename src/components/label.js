@@ -2,7 +2,7 @@ import React from 'react';
 
 const Label = (props) => {
   return (
-      <span class="label label-warning">{props.label}</span>
+      <span className="label label-warning">{props.label}</span>
   )
 }
 export default Label;

@@ -3,13 +3,15 @@ import Message from './message.js';
 
 const Messages = (props) => {
   return (
-    <div className="container">
+    <div>
       {props.messages.map(message=>
         <Message
         key={message.id}
+        id={message.id}
         subject={message.subject}
         read={message.read}
         starred={message.starred}
+        star={props.star}
         selected={message.selected}
         labels={message.labels}/>)}
     </div>
