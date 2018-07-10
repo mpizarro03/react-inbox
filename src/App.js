@@ -100,10 +100,16 @@ select = (id) => {
   }
   this.forceUpdate()
 }
+
+read = () => {
+  console.log("click is working")
+}
   render() {
     return (
       <div className="container">
-        <ToolBar/>
+        <ToolBar
+          read={this.read}
+        />
         <Messages
           messages={this.state.allMessages}
           star={this.star}
