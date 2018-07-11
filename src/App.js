@@ -83,7 +83,7 @@ star = (id) => {
       }
     }
   }
-  this.forceUpdate()
+  this.setState({allMessages: allMessages})
 }
 select = (id) => {
   let allMessages = this.state.allMessages
@@ -98,11 +98,22 @@ select = (id) => {
       }
     }
   }
-  this.forceUpdate()
+  this.setState({allMessages: allMessages})
 }
 
 read = () => {
-  console.log("click is working")
+  let allMessages = this.state.allMessages
+  let selectedMessages = allMessages.filter(message => message.selected)
+  selectedMessages.map(message => message.read = true)
+
+  this.setState({allMessages: allMessages})
+}
+unRead = () => {
+  let allMessages = this.state.allMessages
+  let selectedMessages = allMessages.filter(message => message.selected)
+  selectedMessages.map(message => message.read = false)
+
+  this.setState({allMessages: allMessages})
 }
   render() {
     return (

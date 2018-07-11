@@ -19,7 +19,7 @@ const ToolBar = (props) => {
 
         <button className="btn btn-default" onClick={props.read}>Mark As Read</button>
 
-        <button className="btn btn-default">Mark As Unread</button>
+        <button className="btn btn-default" onClick={props.read}>Mark As Unread</button>
 
         <select className="form-control label-select">
           <option>Apply label</option>
