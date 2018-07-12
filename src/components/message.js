@@ -14,13 +14,11 @@ const Message = (props) => {
           <div className="col-xs-2">
             <input type="checkbox"
               checked={`${props.selected ? "defaultChecked" : ""}`}
-              onClick={() => {
-                props.select(props.id)
-              }}
+              onChange={() => {props.select(props.id)}}
             />
           </div>
           <div className="col-xs-2">
-            <i className={`star fa ${props.starred ? "fa-star" : "fa-star-o"}`}
+            <i className={`${props.starred ? "star fa fa-star" : "star fa fa-star-o"}`}
               onClick={() => {
                 props.star(props.id)
               }}
@@ -29,9 +27,10 @@ const Message = (props) => {
         </div>
       </div>
       <div className="col-xs-11">
-        {props.labels.map(label =>
+        {props.labels.map((label, index) =>
         <Label
-        label={props.labels}/>)}
+          key={index}
+          label={props.labels}/>)}
         <a href="#">{props.subject}</a>
       </div>
     </div>
