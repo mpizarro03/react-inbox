@@ -2,13 +2,15 @@ import React from 'react';
 
 const ToolBar = (props) => {
   return (
-   <div className="App">
     <div className="row toolbar">
       <div className="col-md-12">
         <p className="pull-right">
           <span className="badge badge">{`${props.readCount}`}</span>
           unread messages
         </p>
+        <a className="btn btn-danger" onClick={props.toggleCompose}>
+          <i className="fa fa-plus"></i>
+        </a>
         <button className="btn btn-default" onClick={props.selectAll}>
           <i className={
             `fa ${props.someSelected && !props.allSelected ? 'fa-minus-square-o' : props.allSelected ? 'fa-check-square-o': 'fa-square-o'}`
@@ -37,7 +39,6 @@ const ToolBar = (props) => {
         </button>
       </div>
     </div>
-  </div>
   )
 }
 export default ToolBar;
