@@ -2,11 +2,6 @@ import React from 'react';
 import Label from './label.js';
 
 const Message = (props) => {
-  // console.log("props:", props)
-  // console.log("read:", props.read)
-  // console.log("starred:", props.starred)
-  // console.log("selected:", props.selected)
-  // console.log("labels:", props.labels)
   return (
     <div className={`row message  ${props.read ? "read" : "unread"} ${props.selected ? "selected" : ""}`}>
       <div className="col-xs-1">
@@ -30,7 +25,7 @@ const Message = (props) => {
         {props.labels.map((label, index) =>
         <Label
           key={index}
-          label={props.labels}/>)}
+          label={label}/>)}
         <a href="#">{props.subject}</a>
       </div>
     </div>

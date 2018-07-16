@@ -5,6 +5,7 @@ import ToolBar from './components/toolbar.js'
 import Messages from './components/messages.js'
 import Compose from './components/compose.js'
 
+const API = "http://localhost:8082/api/messages"
 class App extends Component {
   constructor(props){
     super(props)
@@ -13,32 +14,16 @@ class App extends Component {
       allSelected: false,
       someSelected: true,
       readCount: 4,
-      showCompose: false
+      showCompose: false,
+      messageSubject: "",
+      messageBody: ""
     }
-    console.log("this.state:", this.state)
   }
 
   async componentDidMount(){
-    const response = await fetch('http://localhost:8082/api/messages')
+    const response = await fetch(API)
     const JSON = await response.json()
-    console.log("Messages API call:", JSON)
     this.setState({allMessages: JSON})
-  }
-  async newMessage(item){
-    let items = {
-      subject: "",
-      body: ""
-    }
-    const response = await fetch ('http://localhost:8082/api/messages', {
-      method: 'POST',
-      body: JSON.stringify(items),
-      headers: {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json',
-      }
-    })
-    const message = await response.json()
-    this.setState({allMessages: [...this.state.allMessages, message]})
   }
   async update(idArr, command, prop, value){
     let items = {
@@ -61,7 +46,6 @@ class App extends Component {
   star = (id) => {
     let value
     let allMessages = this.state.allMessages
-    //update state to reflect that a message was starred
     for(let i = 0; i < allMessages.length; i++) {
       if(allMessages[i].id === id) {
         if(allMessages[i].starred === true) {
@@ -74,7 +58,6 @@ class App extends Component {
     }
     this.update([id], "star", "starred", value)
   }
-
   select = (id) => {
     this.setState({allSelected: false})
     let allMessages = this.state.allMessages
@@ -116,51 +99,69 @@ class App extends Component {
     }
   }
 
-  read = (e) => {
+  read = () => {
     let allMessages = this.state.allMessages
+    let value
     let readMessages = allMessages.filter(message => message.selected)
-    readMessages.map(readMessage => readMessage.read = true)
-    let read = allMessages.filter(message => message.read === false)
-    this.setState({allMessages: allMessages, readCount: read.length})
+    let readMessagesId = readMessages.map(message => message.id)
+    readMessages.map(readMessage => value = true)
+    this.update(readMessagesId, "read", "read", value)
   }
   unread = () => {
     let allMessages = this.state.allMessages
+    let value
     let readMessages = allMessages.filter(message => message.selected)
-    readMessages.map(message => message.read = false)
+    let unreadMessagesId = readMessages.map(message => message.id)
+    readMessages.map(message => value = false)
+    this.update(unreadMessagesId, "read", "read", value)
+  }
+  delete = (id) => {
+    let allMessages = this.state.allMessages
+    let deleteIds = allMessages.filter(message => message.selected).map(message => message.id)
+    this.update(deleteIds, "delete", "selected", false)
+  }
 
-    let read = allMessages.filter(message => message.read === false)
-    this.setState({allMessages: allMessages, readCount: read.length})
-  }
-  delete = () => {
-    let allMessages = this.state.allMessages
-    let notSelectedMessages = allMessages.filter(message => !message.selected)
-    allMessages = [...notSelectedMessages]
-    let read = allMessages.filter(message => message.read === false)
-    this.setState({allMessages: allMessages, readCount: read.length, someSelected: false, allSelected: false})
-  }
   addLabel = (e) => {
-    let allMessages = this.state.allMessages
-    let selectedMessages = allMessages.filter(selectedMessage => selectedMessage.selected)
-    selectedMessages.map(selectedMessage => {
-      if(!selectedMessage.labels.includes(e.target.value)){
-        selectedMessage.labels.push(e.target.value)
-      }
-    })
-    this.setState({allMessages: allMessages})
+    let value = e.target.value
+    let selectedMessagesId = this.state.allMessages
+      .filter(selectedMessage => selectedMessage.selected)
+      .map(selectedMessage => selectedMessage.id)
+
+    this.update(selectedMessagesId, 'addLabel', "label", value)
   }
+
   removeLabel = (e) => {
-    let allMessages = this.state.allMessages
-    let selectedMessages = allMessages.filter(selectedMessage => selectedMessage.selected)
-    selectedMessages.map(selectedMessage => {
-      let labels = selectedMessage.labels
-      labels.map((label, index) => {
-        labels.splice(index, 1)
-      })
-    })
-    this.setState({allMessages: allMessages})
+    let value = e.target.value
+    let selectedMessagesId = this.state.allMessages
+      .filter(selectedMessage => selectedMessage.selected)
+      .map(selectedMessage => selectedMessage.id)
+
+    this.update(selectedMessagesId, 'removeLabel', "label", value)
   }
+
   toggleCompose = () => {
     this.state.showCompose ? this.setState({showCompose: false}) : this.setState({showCompose: true})
+  }
+  sendMessage = async (e) => {
+      e.preventDefault()
+      let items = {
+        subject: this.state.messageSubject,
+        body: this.state.messageBody
+      }
+      const response = await fetch ('http://localhost:8082/api/messages', {
+        method: 'POST',
+        body: JSON.stringify(items),
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        }
+      })
+      const message = await response.json()
+      this.setState({allMessages: [message,...this.state.allMessages]})
+      this.toggleCompose()
+  }
+  createMessage = (e) => {
+    this.setState({[e.target.name]: e.target.value})
   }
   render() {
     return (
@@ -176,8 +177,11 @@ class App extends Component {
           removeLabel={this.removeLabel}
           delete={this.delete}
           toggleCompose={this.toggleCompose}/>
+
           {this.state.showCompose ? <Compose
-            showCompose={this.state.showCompose}/> : ""}
+            showCompose={this.state.showCompose}
+            createMessage={this.createMessage}
+            sendMessage={this.sendMessage}/> : ""}
         <Messages
           read={this.isRead}
           messages={this.state.allMessages}
