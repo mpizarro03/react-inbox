@@ -58,6 +58,7 @@ class App extends Component {
     }
     this.update([id], "star", "starred", value)
   }
+
   select = (id) => {
     this.setState({allSelected: false})
     let allMessages = this.state.allMessages
@@ -86,6 +87,7 @@ class App extends Component {
       this.setState({allSelected: true})
     }
   }
+
   selectAll = (e) => {
     let allMessages = this.state.allMessages
 
@@ -107,6 +109,7 @@ class App extends Component {
     readMessages.map(readMessage => value = true)
     this.update(readMessagesId, "read", "read", value)
   }
+
   unread = () => {
     let allMessages = this.state.allMessages
     let value
@@ -115,6 +118,7 @@ class App extends Component {
     readMessages.map(message => value = false)
     this.update(unreadMessagesId, "read", "read", value)
   }
+
   delete = (id) => {
     let allMessages = this.state.allMessages
     let deleteIds = allMessages.filter(message => message.selected).map(message => message.id)
@@ -160,9 +164,11 @@ class App extends Component {
       this.setState({allMessages: [message,...this.state.allMessages]})
       this.toggleCompose()
   }
+  
   createMessage = (e) => {
     this.setState({[e.target.name]: e.target.value})
   }
+
   render() {
     return (
       <div className="container">
